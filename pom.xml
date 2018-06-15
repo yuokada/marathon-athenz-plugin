@@ -13,6 +13,7 @@
     <project.jdk.version>1.8</project.jdk.version>
     <maven.compiler.source>${project.jdk.version}</maven.compiler.source>
     <maven.compiler.target>${project.jdk.version}</maven.compiler.target>
+    <athenz.version>1.7.50</athenz.version>
   </properties>
 
   <licenses>
@@ -27,7 +28,8 @@
     <dependency>
       <groupId>mesosphere.marathon</groupId>
       <artifactId>plugin-interface_2.11</artifactId>
-      <version>1.4.8</version>
+      <version>1.4.9</version>
+      <!--<version>1.6.322</version>-->
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -47,6 +49,14 @@
       <artifactId>testng</artifactId>
       <version>6.9.5</version>
       <scope>test</scope>
+    </dependency>
+
+    <!--Athenz -->
+    <!--see: https://github.com/yahoo/athenz/blob/master/docs/example_java_decentralized_access.md -->
+    <dependency>
+      <groupId>com.yahoo.athenz</groupId>
+      <artifactId>athenz-zpe-java-client</artifactId>
+      <version>${athenz.version}</version>
     </dependency>
   </dependencies>
 
@@ -101,5 +111,11 @@
       <name>Mesosphere Repo</name>
       <url>http://downloads.mesosphere.io/maven</url>
     </repository>
+
+      <repository>
+        <id>bintray-yahoo-maven</id>
+        <name>bintray</name>
+        <url>http://yahoo.bintray.com/maven</url>
+      </repository>
   </repositories>
 </project>
