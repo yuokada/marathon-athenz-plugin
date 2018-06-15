@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.yuokada</groupId>
@@ -13,7 +11,9 @@
     <project.jdk.version>1.8</project.jdk.version>
     <maven.compiler.source>${project.jdk.version}</maven.compiler.source>
     <maven.compiler.target>${project.jdk.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <athenz.version>1.7.50</athenz.version>
+    <build.no>0</build.no>
   </properties>
 
   <licenses>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>mesosphere.marathon</groupId>
       <artifactId>plugin-interface_2.11</artifactId>
-      <version>1.4.9</version>
+      <version>1.4.11</version>
       <!--<version>1.6.322</version>-->
       <scope>provided</scope>
     </dependency>
@@ -61,8 +61,42 @@
   </dependencies>
 
   <build>
-    <finalName>marathon-ldap</finalName>
+    <finalName>marathon-athenz-plugin</finalName>
+    <sourceDirectory>src/main/java</sourceDirectory>
     <plugins>
+      <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.17</version>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <configuration>
+              <configLocation>src/checkstyle/checks.xml</configLocation>
+              <encoding>UTF-8</encoding>
+              <consoleOutput>true</consoleOutput>
+              <failsOnError>true</failsOnError>
+            </configuration>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin> -->
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <encoding>UTF-8</encoding>
+          <showWarnings>true</showWarnings>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
@@ -71,7 +105,42 @@
           <skip>true</skip>
         </configuration>
       </plugin>
+
+      <!-- Build rpm using the untarred artifacts BEGIN -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>2.1.5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>rpm</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!--see: http://www.mojohaus.org/rpm-maven-plugin/ident-params.html-->
+          <version>${project.version}</version>
+          <group>Applications/Databases</group>
+          <description>Marathon Athenz Plugin Package.</description>
+          <license>ASL 2.0</license>
+          <release>${build.no}.el7</release>
+          <needarch>true</needarch>
+          <packager>Yukihiro Okada</packager>
+          <!--see: http://www.mojohaus.org/rpm-maven-plugin/map-params.html-->
+          <mappings>
+            <mapping>
+              <directory>/usr/share/marathon/lib/plugins/athnz</directory>
+              <dependency></dependency>
+              <artifact/>
+            </mapping>
+          </mappings>
+        </configuration>
+
+      </plugin>
     </plugins>
+
+    <!-- Build rpm END -->
   </build>
 
   <profiles>
@@ -112,10 +181,10 @@
       <url>http://downloads.mesosphere.io/maven</url>
     </repository>
 
-      <repository>
-        <id>bintray-yahoo-maven</id>
-        <name>bintray</name>
-        <url>http://yahoo.bintray.com/maven</url>
-      </repository>
+    <repository>
+      <id>bintray-yahoo-maven</id>
+      <name>bintray</name>
+      <url>http://yahoo.bintray.com/maven</url>
+    </repository>
   </repositories>
 </project>

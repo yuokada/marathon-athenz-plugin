@@ -1,0 +1,7 @@
+{
+  "authenticationHeader": "Athenz-Role-Auth",
+  "athenzResource": "queryengine.privates.muon:devcluster",
+  "athenzAction": "*",
+  "athenzConfig": "/etc/athenz/athenz.conf",
+  "athenzPolicyDir": "/etc/athenz/zpl"
+}

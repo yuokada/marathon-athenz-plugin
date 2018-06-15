@@ -1,0 +1,26 @@
+{
+  "plugins": {
+    "authorization": {
+      "plugin": "mesosphere.marathon.plugin.auth.Authorizer",
+      "implementation": "io.github.yuokada.marathon.plugin.athenz.AthenzAuthorizer",
+      "configuration": {
+        "authenticationHeader": "Athenz-Role-Auth",
+        "athenzResource": "demo.domain.service4marathon:marathonresource",
+        "athenzAction": "permitAccess",
+        "athenzConfig": "/etc/athenz/athenz.conf",
+        "athenzPolicyDir": "/path/to/policyDir"
+      }
+    },
+    "authentication": {
+      "plugin": "mesosphere.marathon.plugin.auth.Authenticator",
+      "implementation": "io.github.yuokada.marathon.plugin.athenz.AthenzAuthenticator",
+      "configuration": {
+        "authenticationHeader": "Athenz-Role-Auth",
+        "athenzResource": "demo.domain.service4marathon:marathonresource",
+        "athenzAction": "permitAccess",
+        "athenzConfig": "/etc/athenz/athenz.conf",
+        "athenzPolicyDir": "/path/to/policyDir"
+      }
+    }
+  }
+}
