@@ -46,10 +46,21 @@ public class AthenzAuthenticator implements Authenticator, PluginConfiguration {
                 if (status == AccessCheckStatus.ALLOW) {
                     RoleToken roleToken = AuthZpeClient.validateRoleToken(tokenString);
                     return new AthenzIdentity(roleToken);
+                } else {
+                    return null;
                 }
             }
         } catch (Exception ex) { /* do not authenticate in case of exception */ }
-        return null;
+        if (config.getEnableGuest()) {
+            // Return GuestUser Identity
+            return new AthenzIdentity();
+        } else {
+            return null;
+        }
+    }
+
+    private AccessCheckStatus getAccessCheckStatus(String tokenString){
+        return AuthZpeClient.allowAccess(tokenString, config.getResource(), config.getAction());
     }
 
     @Override
@@ -63,11 +74,6 @@ public class AthenzAuthenticator implements Authenticator, PluginConfiguration {
         response.body("application/json",
             String.format("{\"Error\": \"%s\"}", status.toString()).getBytes());
     }
-
-    private AccessCheckStatus getAccessCheckStatus(String tokenString){
-        return AuthZpeClient.allowAccess(tokenString, config.getResource(), config.getAction());
-    }
-
     @Override
     public void initialize(Map<String, Object> marathonInfo, JsObject jsObject) {
         try {

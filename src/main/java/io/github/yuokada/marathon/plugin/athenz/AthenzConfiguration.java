@@ -19,6 +19,9 @@ public class AthenzConfiguration {
     @JsonProperty(value = "athenzPolicyDir", required = false)
     private String policyDir = "/etc/athenz/pol";
 
+    @JsonProperty(value = "enableGuestUser", required = false)
+    private Boolean enableGuest = false;
+
     public String getAuthenticationHeader()
     {
         return authenticationHeader;
@@ -27,6 +30,14 @@ public class AthenzConfiguration {
     public void setAuthenticationHeader(String authenticationHeader)
     {
         this.authenticationHeader = authenticationHeader;
+    }
+
+    public Boolean getEnableGuest(){
+        return enableGuest;
+    }
+
+    public void setEnableGuest(Boolean enableGuest){
+        this.enableGuest = enableGuest;
     }
 
     public String getResource() {

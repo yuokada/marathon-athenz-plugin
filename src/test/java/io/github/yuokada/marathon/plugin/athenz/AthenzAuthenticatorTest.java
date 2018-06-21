@@ -26,6 +26,7 @@ public class AthenzAuthenticatorTest
         assertEquals(config.getAction(), "*");
         assertEquals(config.getAthenzConfig(), "/etc/athenz/athenz.conf");
         assertEquals(config.getPolicyDir(), "/etc/athenz/zpl");
+        assertTrue(config.getEnableGuest());
     }
 
     private AthenzConfiguration getConfig() throws Exception {

@@ -11,6 +11,10 @@ public class AthenzIdentity implements Identity {
     private String user;
     private RoleToken roleToken;
 
+    public AthenzIdentity(){
+        this.user = "guest";
+    }
+
     public AthenzIdentity(RoleToken token) {
         this.roleToken = token;
         this.user = token.getProxyUser();
@@ -27,6 +31,10 @@ public class AthenzIdentity implements Identity {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public Boolean isGuestUser(){
+        return user == "guest";
     }
 
     @Override

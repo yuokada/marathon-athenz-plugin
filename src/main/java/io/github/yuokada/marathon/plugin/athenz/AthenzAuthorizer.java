@@ -30,6 +30,7 @@ public class AthenzAuthorizer implements Authorizer, PluginConfiguration {
             AthenzIdentity identity = (AthenzIdentity) principal;
             AthenzAction athenzAction = AthenzAction.byAction(action);
             LOGGER.info(resource.toString());
+
             // NOTE: {"message":"mesosphere.marathon.plugin.auth.AuthorizedResource$Plugins$ cannot be cast to mesosphere.marathon.plugin.PathId"}
             return isAuthorized(identity, athenzAction);
         }
@@ -43,13 +44,13 @@ public class AthenzAuthorizer implements Authorizer, PluginConfiguration {
             case CreateAppOrGroup:
             case UpdateAppOrGroup:
             case DeleteAppOrGroup:
-                return true;
+                return !isGuestUser(principal);
             case ViewRunSpec:
             case ViewAppOrGroup:
             case ViewResource:
                 return true;
             case KillTask:
-                return false;
+                return !isGuestUser(principal);
             default:
                 return true;
         }
@@ -81,11 +82,21 @@ public class AthenzAuthorizer implements Authorizer, PluginConfiguration {
         return AuthZpeClient.allowAccess(token, config.getResource(), config.getAction());
     }
 
+    private boolean isGuestUser(Identity principal){
+        AthenzIdentity athenzIdentity = (AthenzIdentity) principal;
+        return athenzIdentity.isGuestUser();
+    }
+
     @Override
     public void handleNotAuthorized(Identity principal, HttpResponse response) {
         response.status(403);
-        response.body("application/json",
-            "{\"Error\": \"Not Authorized to perform this action!\"}".getBytes());
+        if (isGuestUser(principal)) {
+            response.body("application/json",
+                "{\"Error\": \"Not Authorized to perform this action for GuestUser!\"}".getBytes());
+        } else {
+            response.body("application/json",
+                "{\"Error\": \"Not Authorized to perform this action!\"}".getBytes());
+        }
     }
 
     @Override
