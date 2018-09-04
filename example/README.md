@@ -21,9 +21,9 @@ $ sudo JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=
        --plugin_conf /path/to/plugin-conf.json
 ```
 
-marathon log is output to `/var/log/all`
+marathon log is output to `/var/log/messages`
 ```
-$ sudo tail -F /var/log/all |grep marathon
+$ sudo tail -F /var/log/messages |grep marathon
 ```
 
 ## Test this plugin
