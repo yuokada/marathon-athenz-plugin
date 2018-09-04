@@ -15,9 +15,15 @@ $ sudo /usr/bin/marathon \
 For Debug with IDE
 ```
 $ sudo JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005" /usr/bin/marathon \
+       --logging_level debug \
        --http_port 8080 \
        --plugin_dir /usr/share/marathon/lib/plugins/athnz/ \
        --plugin_conf /path/to/plugin-conf.json
+```
+
+marathon log is output to `/var/log/all`
+```
+$ sudo tail -F /var/log/all |grep marathon
 ```
 
 ## Test this plugin
