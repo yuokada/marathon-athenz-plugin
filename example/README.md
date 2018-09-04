@@ -61,8 +61,4 @@ $ sudo bash -xe /usr/bin/marathon --logging_level debug --http_port 8080 --plugi
   ```
   src/main/resources/META-INF/services/mesosphere.marathon.plugin.auth.Authorizer
   src/main/resources/META-INF/services/mesosphere.marathon.plugin.auth.Authenticator
-  
-   $ cat src/main/resources/META-INF/services/mesosphere.marathon.plugin.auth.Authenticator
-   jp.co.yahoo.qe.marathon.plugin.athenz.AthenzAuthenticator
   ```
-
